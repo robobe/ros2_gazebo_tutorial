@@ -19,6 +19,7 @@ def generate_launch_description():
     arg_gazebo_verbose = DeclareLaunchArgument("verbose", default_value="true")
     world = LaunchConfiguration("world")
     arg_gazebo_world = DeclareLaunchArgument("world", default_value=WORLD)
+    
 
     resources = [os.path.join(pkg, "worlds")]
 
@@ -38,6 +39,8 @@ def generate_launch_description():
                     launch_arguments={'verbose': verbose, "world": world}.items()
              )
 
+
+ 
     ld.add_action(models_env)
     ld.add_action(resource_env)
     ld.add_action(arg_gazebo_verbose)

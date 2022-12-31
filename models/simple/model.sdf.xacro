@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<sdf version="1.6" xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:property name="w" value="1"/>
+    <model name="box">
+        <link name="link">
+            <visual name="visual">
+                <geometry>
+                    <box>
+                        <size>${w} ${w} ${w}</size>
+                    </box>
+                </geometry>
+            </visual>
+            <collision name="collision">
+                <geometry>
+                    <box>
+                        <size>${w} ${w} ${w}</size>
+                    </box>
+                </geometry>
+            </collision>
+        </link>
+    </model>
+</sdf>

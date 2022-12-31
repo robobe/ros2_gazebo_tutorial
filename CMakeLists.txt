@@ -7,10 +7,21 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 
 install(
-  DIRECTORY launch worlds
+  DIRECTORY launch worlds models
   DESTINATION share/${PROJECT_NAME}
 )
+
+# Install Python modules
+ament_python_install_package(${PROJECT_NAME})
+
+# Install Python executables
+install(PROGRAMS
+    ros2_gazebo_tutorial/entity_state.py
+    ros2_gazebo_tutorial/imu_demo.py
+    DESTINATION lib/${PROJECT_NAME}
+    )
 
 ament_package()
