@@ -1,0 +1,96 @@
+<sdf version="1.6">
+    <world name="default">
+        <include>
+            <uri>model://ground_plane</uri>
+        </include>
+        <include>
+            <uri>model://sun</uri>
+        </include>
+        <!-- models-->
+        <model name="cube">
+            <static>true</static>
+            <pose relative_to="world">0 0 2.5 0 0 0</pose>
+            <link name="link">
+                <visual name="visual">
+                    <geometry>
+                        <box>
+                            <size>2 1 1</size>
+                        </box>
+                    </geometry>
+                </visual>
+            </link>
+            <joint name="link2imu" type="fixed">
+                <parent>link</parent>
+                <child>imu</child>
+                
+            </joint>
+            <link name="imu">
+                <pose relative_to="link">0 0 0.5 0 0 1.575</pose>
+                <sensor name="my_imu" type="imu">
+                    <always_on>true</always_on>
+                    <update_rate>10</update_rate>
+                    <imu>
+                        <angular_velocity>
+                            <x>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>2e-4</stddev>
+                                </noise>
+                            </x>
+                            <y>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>2e-4</stddev>
+                                </noise>
+                            </y>
+                            <z>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>2e-4</stddev>
+                                </noise>
+                            </z>
+                        </angular_velocity>
+                        <linear_acceleration>
+                            <x>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>1.7e-2</stddev>
+                                </noise>
+                            </x>
+                            <y>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>1.7e-2</stddev>
+                                </noise>
+                            </y>
+                            <z>
+                                <noise type="gaussian">
+                                    <mean>0.0</mean>
+                                    <stddev>1.7e-2</stddev>
+                                </noise>
+                            </z>
+                        </linear_acceleration>
+                    </imu>
+                    <plugin name="my_imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+                        <initial_orientation_as_reference>false</initial_orientation_as_reference>
+                        <ros>
+                            <!-- Will publish to /imu/data -->
+                            <namespace>/imu</namespace>
+                            <remapping>~/out:=data</remapping>
+                        </ros>
+                        <!-- frame_name ommited, will be "my_link" -->
+                    </plugin>
+                </sensor>
+            </link>
+        </model>
+        <!-- plugins -->
+        <plugin name="gazebo_ros_state" filename="libgazebo_ros_state.so">
+            
+            <ros>
+                <namespace>/demo</namespace>
+                <argument>--ros-args --remap model_states:=model_states_demo</argument>
+            </ros>
+            <update_rate>1.0</update_rate>
+        </plugin>
+    </world>
+</sdf>
