@@ -1,0 +1,66 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="camera2">
+    <link name="camera_link">
+      <frame name="camera_optical" attached_to="camera_link">
+        <pose relative_to="camera_link">0.05 0 0 -1.575 0 -1.575</pose>
+      </frame>
+      <inertial>
+        <mass>0.1</mass>
+        <inertia>
+          <ixx>0.000166667</ixx>
+          <iyy>0.000166667</iyy>
+          <izz>0.000166667</izz>
+        </inertia>
+      </inertial>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.1</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.1 0.1 0.1</size>
+          </box>
+        </geometry>
+      </visual>
+      <sensor name="camera" type="camera">
+        <pose>0.05 0 0 0 0 0</pose>
+        <camera>
+          <horizontal_fov>1.047</horizontal_fov>
+          <image>
+            <width>320</width>
+            <height>240</height>
+          </image>
+          <clip>
+            <near>0.1</near>
+            <far>100</far>
+          </clip>
+        </camera>
+        <always_on>1</always_on>
+        <update_rate>15</update_rate>
+        <visualize>true</visualize>
+        <plugin name="camera" filename="libgazebo_ros_camera.so">
+          <!-- Change namespace, camera name and topics so -
+                 * Images are published to: /custom_ns/custom_camera/custom_image
+                 * Camera info is published to: /custom_ns/custom_camera/custom_info
+            -->
+          <!-- <ros>
+              <namespace>custom_ns</namespace>
+              <remapping>image_raw:=custom_img</remapping>
+              <remapping>camera_info:=custom_info</remapping>
+            </ros> -->
+
+          <!-- Set camera name. If empty, defaults to sensor name (i.e. "sensor_name") -->
+          <!-- <camera_name>custom_camera</camera_name> -->
+
+          <!-- Set TF frame name. If empty, defaults to link name (i.e. "link_name") -->
+          <frame_name>camera_optical</frame_name>
+        </plugin>
+      </sensor>
+    </link> 
+  </model>
+</sdf>
