@@ -21,6 +21,7 @@ ament_python_install_package(${PROJECT_NAME})
 install(PROGRAMS
     ros2_gazebo_tutorial/entity_state.py
     ros2_gazebo_tutorial/imu_demo.py
+    ros2_gazebo_tutorial/ultrasonic_demo.py
     DESTINATION lib/${PROJECT_NAME}
     )
 

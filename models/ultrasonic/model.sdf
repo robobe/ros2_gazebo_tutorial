@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<sdf version="1.5">
+    <model name="ultrasonic">
+        <link name="link">
+            <inertial>
+                <mass>0.1</mass>
+                <inertia>
+                  <ixx>0.000166667</ixx>
+                  <iyy>0.000166667</iyy>
+                  <izz>0.000166667</izz>
+                </inertia>
+              </inertial>
+            <collision name="collision">
+                <geometry>
+                    <box>
+                        <size>0.1 0.1 0.1</size>
+                    </box>
+                </geometry>
+            </collision>
+            <visual name="visual">
+                <geometry>
+                    <box>
+                        <size>0.1 0.1 0.1</size>
+                    </box>
+                </geometry>
+            </visual>
+            <sensor name="ultrasonic_1" type="ray">
+                <always_on>true</always_on>
+                <visualize>true</visualize>
+                <update_rate>5</update_rate>
+                <ray>
+                    <scan>
+                        <horizontal>
+                            <samples>5</samples>
+                            <resolution>1.000000</resolution>
+                            <min_angle>-0.12</min_angle>
+                            <max_angle>0.12</max_angle>
+                        </horizontal>
+                        <vertical>
+                            <samples>5</samples>
+                            <resolution>1.000000</resolution>
+                            <min_angle>-0.01</min_angle>
+                            <max_angle>0.01</max_angle>
+                        </vertical>
+                    </scan>
+                    <range>
+                        <min>0.2</min>
+                        <max>4</max>
+                        <resolution>0.01</resolution>
+                    </range>
+                    <noise>
+                        <type>gaussian</type>
+                        <mean>0.0</mean>
+                        <stddev>0.01</stddev>
+                    </noise>
+                </ray>
+                <plugin name="ultrasonic_sensor" filename="libgazebo_ros_ray_sensor.so">
+                    <ros>
+                        <remapping>~/out:=ultrasonic_sensor_1</remapping>
+                    </ros>
+                    <output_type>sensor_msgs/Range</output_type>
+                    <radiation_type>ultrasound</radiation_type>
+                    <frame_name>link</frame_name>
+                </plugin>
+            </sensor>
+        </link>
+    </model>
+</sdf>
