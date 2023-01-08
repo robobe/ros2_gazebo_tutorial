@@ -9,16 +9,19 @@ import xacro
 
 PACKAGE_NAME = "ros2_gazebo_tutorial"
 WORLD = "camera.world"
-MODEL = "ultrasonic"
+MODEL = "lidar"
 SDF = "model.sdf"
 
 def generate_launch_description():
     pkg = get_package_share_directory(PACKAGE_NAME)
-    pkg_gazebo_ros = get_package_share_directory('gazebo_ros')
+    gazebo_pkg = get_package_share_directory('gazebo_ros')
     model_sdf_full_path = os.path.join(pkg, "models", MODEL, "model.sdf")
 
     sim_time = LaunchConfiguration("sim_time")
     arg_sim_time = DeclareLaunchArgument("sim_time", default_value="true")
+
+    verbose = LaunchConfiguration("verbose")
+    arg_verbose = DeclareLaunchArgument("verbose", default_value="true")
 
     resources = [
         os.path.join(pkg, "worlds")    
@@ -26,14 +29,11 @@ def generate_launch_description():
 
     resource_env = AppendEnvironmentVariable(name="GAZEBO_RESOURCE_PATH", value=":".join(resources))
 
-    start_gazebo_server_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(pkg_gazebo_ros, 'launch', 'gzserver.launch.py')),
-        launch_arguments={
-            "verbose": "true", 
-            'world': WORLD}.items())
-
-    start_gazebo_client_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(os.path.join(pkg_gazebo_ros, 'launch', 'gzclient.launch.py')))
+    gazebo = IncludeLaunchDescription(
+                PythonLaunchDescriptionSource([os.path.join(
+                    gazebo_pkg, 'launch', 'gazebo.launch.py')]),
+                    launch_arguments={'verbose': verbose, "world": WORLD}.items()
+             )
 
     robot_description_path = os.path.join(pkg, "models", MODEL, SDF)
     doc = xacro.parse(open(robot_description_path))
@@ -74,10 +74,10 @@ def generate_launch_description():
     )
 
     ld = LaunchDescription()
+    ld.add_action(arg_verbose)
     ld.add_action(arg_sim_time)
     ld.add_action(resource_env)
-    ld.add_action(start_gazebo_server_cmd)
-    ld.add_action(start_gazebo_client_cmd)
+    ld.add_action(gazebo)
     ld.add_action(robot_state_publisher)
     ld.add_action(spawn_entity_cmd)
     ld.add_action(rviz)
